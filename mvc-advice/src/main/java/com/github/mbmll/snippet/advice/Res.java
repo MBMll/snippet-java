@@ -1,4 +1,4 @@
-package com.github.mbmll.snippt.advice;
+package com.github.mbmll.snippet.advice;
 
 import lombok.Builder;
 import lombok.Data;
