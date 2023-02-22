@@ -155,19 +155,22 @@
                 <version>${modelmapper.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.ntt.cmpf</groupId>
-                <artifactId>carbon-common</artifactId>
-                <version>${carbon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.ntt.cmpf</groupId>
-                <artifactId>carbon-message</artifactId>
-                <version>${carbon.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
+                <scope>test</scope>
                 <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.javafaker</groupId>
+                <artifactId>javafaker</artifactId>
+                <scope>test</scope>
+                <version>1.0.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.jsonzou</groupId>
+                <artifactId>jmockdata</artifactId>
+                <scope>test</scope>
+                <version>4.2.0</version>
             </dependency>
             <dependency>
                 <groupId>org.keycloak</groupId>
@@ -283,7 +286,7 @@
                                 <include>**/*IntegrationTest.java</include>
                             </includes>
                             <reuseForks>true</reuseForks>
-<!--                            <argLine>${itCoverageAgent}</argLine>-->
+                            <!--                            <argLine>${itCoverageAgent}</argLine>-->
                         </configuration>
                     </execution>
                 </executions>
@@ -350,4 +353,60 @@
         </profile>
     </profiles>
 
+<!--    <mirror>-->
+<!--        <id>aliyunmaven</id>-->
+<!--        <mirrorOf>*</mirrorOf>-->
+<!--        <name>阿里云公共仓库</name>-->
+<!--        <url>https://maven.aliyun.com/repository/public</url>-->
+<!--    </mirror>-->
+
+    <repositories>
+        <repository>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven China Mirror</name>
+            <url>http://maven.net.cn/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus-163</id>
+            <name>Nexus 163</name>
+            <url>http://mirrors.163.com/maven/repository/maven-public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven China Mirror</name>
+            <url>http://maven.net.cn/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
