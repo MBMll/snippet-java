@@ -5,7 +5,6 @@ import com.github.jsonzou.jmockdata.MockConfig;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,20 +32,16 @@ public class CollectionUtilsTest {
                 list.add(child);
             }
         }
-        List<Menu> menus = CollectionUtils.toTree(list, new CollectionUtils.Collector<Menu>() {
-            @Override
-            public boolean compare(Menu parent, Menu child) {
-                if (parent == null) {
-                    return null == child.parentId;
-                }
-                return Objects.equals(parent.id, child.parentId);
-            }
-
-            @Override
-            public void putAll(Menu parent, Collection<Menu> collection) {
-                parent.subMenus = new ArrayList<>(collection);
-            }
-        });
+        List<Menu> menus = CollectionUtils.toTree(list,
+                (parent, child) -> {
+                    if (parent == null) {
+                        return null == child.parentId;
+                    }
+                    return Objects.equals(parent.id, child.parentId);
+                },
+                (parent, collection) -> {
+                    parent.subMenus = new ArrayList<>(collection);
+                });
         System.out.println(menus);
     }
 
