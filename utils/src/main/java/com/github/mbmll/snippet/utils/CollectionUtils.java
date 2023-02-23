@@ -1,17 +1,24 @@
 package com.github.mbmll.snippet.utils;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * collection utils.
+ *
  * @Author xlc
  * @Description
  * @Date 2023/2/22 22:52
  */
-
 public class CollectionUtils {
+
     public static <T> boolean isEmpty(Collection<T> target) {
         return target == null || target.isEmpty();
     }
@@ -20,9 +27,11 @@ public class CollectionUtils {
         return getChildren(sources, null, comparator, collector);
     }
 
-    private static <T> List<T> getChildren(List<T> sources, T parent, Comparator<T> comparator, Collector<T> collector) {
+    private static <T> List<T> getChildren(List<T> sources, T parent, Comparator<T> comparator,
+        Collector<T> collector) {
         if (!isEmpty(sources)) {
-            Map<Boolean, List<T>> collect = sources.stream().collect(Collectors.groupingBy(child -> comparator.compare(parent, child)));
+            Map<Boolean, List<T>> collect = sources.stream()
+                .collect(Collectors.groupingBy(child -> comparator.compare(parent, child)));
             List<T> childs = collect.get(true);
             if (!isEmpty(childs)) {
                 for (T child : childs) {
@@ -39,10 +48,9 @@ public class CollectionUtils {
      * @param classifier
      * @param <T>
      * @param <K>
-     *
      * @return
      */
-    public static <T, K> Map<K, List<T>> groupBy(List<T> sources, Function<T, K> classifier) {
+    public static <T, K> Map<K, List<T>> groupBy(Iterable<T> sources, Function<T, K> classifier) {
         HashMap<K, List<T>> map = new HashMap<>();
         for (T source : sources) {
             K key = classifier.apply(source);
@@ -52,7 +60,9 @@ public class CollectionUtils {
         return map;
     }
 
-    public static <T, K> List<T> toTree(List<T> sources, Function<T, K> getParent, Function<T, K> getCurrent, Collector<T> collector) {
+    public static <T, K> List<T> toTree(List<T> sources, Function<T, K> getParent, Function<T, K> getCurrent,
+        Collector<T> collector) {
+
         if (isEmpty(sources)) {
             return sources;
         }
@@ -64,6 +74,7 @@ public class CollectionUtils {
     }
 
     public interface Comparator<T> {
+
         boolean compare(T parent, T child);
     }
 
