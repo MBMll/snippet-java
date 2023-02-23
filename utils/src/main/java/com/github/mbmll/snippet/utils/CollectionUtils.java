@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  */
 
 public class CollectionUtils {
-    public static boolean isEmpty(Collection target) {
+    public static <T> boolean isEmpty(Collection<T> target) {
         return target == null || target.isEmpty();
     }
 
@@ -35,7 +35,7 @@ public class CollectionUtils {
     }
 
     /**
-     * @param sources 
+     * @param sources
      * @param classifier
      * @param <T>
      * @param <K>
@@ -46,10 +46,8 @@ public class CollectionUtils {
         HashMap<K, List<T>> map = new HashMap<>();
         for (T source : sources) {
             K key = classifier.apply(source);
-            if (!map.containsKey(key)) {
-                map.put(key, new ArrayList<>());
-                map.get(key).add(source);
-            }
+            map.computeIfAbsent(key, k -> new ArrayList<>());
+            map.get(key).add(source);
         }
         return map;
     }
@@ -59,11 +57,10 @@ public class CollectionUtils {
             return sources;
         }
         Map<K, List<T>> groups = groupBy(sources, getParent);
-        List<T> ts = groups.get(null);
-        for (T t : ts) {
-            collector.putAll(t, groups.get(getCurrent.apply(t)));
-        }
-        return ts;
+        Map<K, T> map = sources.stream().collect(Collectors.toMap(getCurrent, t -> t));
+        List<T> root = groups.remove(null);
+        groups.forEach((k, ts) -> collector.putAll(map.get(k), ts));
+        return root;
     }
 
     public interface Comparator<T> {
@@ -71,11 +68,8 @@ public class CollectionUtils {
     }
 
     public interface Collector<T> {
-//        default boolean compare(T parent, T child) {
-//            return false;
-//        }
 
-        void putAll(T parent, Collection<T> collection);
+        void putAll(T parent, List<T> collection);
 
     }
 }

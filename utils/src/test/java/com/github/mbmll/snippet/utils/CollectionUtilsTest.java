@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -15,7 +16,48 @@ import java.util.Objects;
  */
 public class CollectionUtilsTest {
     @Test
+    public void groupBy() {
+
+        ArrayList<Menu> list = new ArrayList<>();
+        MockConfig config = MockConfig.newInstance().excludes("subMenus");
+        for (int i = 0; i < 10; i++) {
+            Menu parent = JMockData.mock(Menu.class, config);
+            parent.parentId = null;
+            list.add(parent);
+            for (int j = 0; j < 10; j++) {
+                Menu child = JMockData.mock(Menu.class, config);
+                child.parentId = parent.id;
+                list.add(child);
+            }
+        }
+        Map<Long, List<Menu>> groupBy = CollectionUtils.groupBy(list, m -> m.parentId);
+        System.out.println(groupBy.size() + " menu");
+        System.out.println(groupBy.get(null));
+    }
+
+    @Test
     public void isEmpty() {
+    }
+
+    @Test
+    public void testToTree() {
+
+        ArrayList<Menu> list = new ArrayList<>();
+        MockConfig config = MockConfig.newInstance().excludes("subMenus");
+        for (int i = 0; i < 10; i++) {
+            Menu parent = JMockData.mock(Menu.class, config);
+            parent.parentId = null;
+            list.add(parent);
+            for (int j = 0; j < 10; j++) {
+                Menu child = JMockData.mock(Menu.class, config);
+                child.parentId = parent.id;
+                list.add(child);
+            }
+        }
+        List<Menu> menus = CollectionUtils.toTree(list, menu -> menu.parentId, menu -> menu.id, (parent, collection) -> {
+            parent.subMenus = collection;
+        });
+        System.out.println(menus);
     }
 
     @Test
