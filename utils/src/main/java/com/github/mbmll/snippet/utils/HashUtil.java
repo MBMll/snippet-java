@@ -17,7 +17,8 @@ public class HashUtil {
      * @see java.util.HashMap#hash(Object)
      */
     public static int hash4Slice(Object key, int bucketSize) {
-        return (bucketSize - 1) & (key.hashCode() ^ (key.hashCode() >>> 16));
+        int code = key.hashCode();
+        return (bucketSize - 1) & (code ^ (code >>> 16));
     }
 
 }
